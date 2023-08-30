@@ -1,0 +1,2 @@
+importFrom(stats, bw.nrd, sd, dnorm, pnorm, var)
+export("delta.e.estimate")
