@@ -3,7 +3,7 @@
 \title{
 Tests for a treatment effect on the primary outcome using surrogate marker information}
 \description{
-Nonparametric test for a treatment effect on the primary outcome using surrogate marker information. This test borrows information from a prior study about the relationship between the surrogate and the primary outcome to test for a treatment effect in the current study.}
+Nonparametric test for a treatment effect on the primary outcome using surrogate marker information. This test borrows information from a prior study (Study A) about the relationship between the surrogate and the primary outcome to test for a treatment effect in the current study (Study B).}
 \usage{
 delta.e.estimate(sone = NULL, szero = NULL, szerop, yzerop, extrapolate = TRUE, 
 mat = NULL, n1 = NULL, n0 = NULL)
@@ -42,7 +42,9 @@ sample size of control group in Study B; only needed if mat is provided instead 
 \item{delta.e.p}{p-value of test statistic} 
 }
 \references{
-Parast, Cai, and Tian (2022+). Using a Surrogate with Heterogeneous Utility to Test for a Treatment Effect. 
+Parast, Cai, and Tian (2023). Using a Surrogate with Heterogeneous Utility to Test for a Treatment Effect. Statistics in Medicine, 42(1): 68-88.
+
+Parast and Bartroff (2023+). Group Sequential Testing of a Treatment Effect Using a Surrogate Marker. Under Review.
 }
 \author{
 Layla Parast
