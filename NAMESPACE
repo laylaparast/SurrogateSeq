@@ -1,2 +1,3 @@
-importFrom(stats, bw.nrd, sd, dnorm, pnorm, var)
-export("delta.e.estimate")
+importFrom(stats, bw.nrd, sd, dnorm, pnorm, var, quantile, cov, cov2cor, qnorm, weighted.mean)
+importFrom(MASS, mvrnorm)
+export("delta.e.estimate", "gs.boundaries")
