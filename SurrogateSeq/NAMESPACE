@@ -1,3 +1,4 @@
 importFrom(stats, bw.nrd, sd, dnorm, pnorm, var, quantile, cov, cov2cor, qnorm, weighted.mean)
 importFrom(MASS, mvrnorm)
+importFrom(ggplot2, ggplot, aes, geom_point, geom_hline, stat_function, ylim, labs, annotate)
 export("delta.e.estimate", "gs.boundaries")

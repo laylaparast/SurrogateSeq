@@ -60,7 +60,7 @@ Kern.FUN <- function(zz,zi,bw)
      matrix(vc, ncol=length(vc), nrow=dm, byrow=T)
     }
 
-gs.boundaries = function(szerop, sonep, yzerop, n.stg, B.norm=1e6, alpha=0.05, pp=0.4, inf.fraction = (1:n.stg)/n.stg){
+gs.boundaries = function(szerop, sonep, yzerop, n.stg, B.norm=1e6, alpha=0.05, pp=0.4, inf.fraction = (1:n.stg)/n.stg, plot=FALSE){
 	bdr.naive = rep(qnorm(1-0.05/2),n.stg)
 	bdr.bonf = rep(qnorm(1-0.05/(2*n.stg)),n.stg)
 	
@@ -75,10 +75,22 @@ gs.boundaries = function(szerop, sonep, yzerop, n.stg, B.norm=1e6, alpha=0.05, p
 
     bdr.OF=bdr.gs.mc.gen(alpha=alpha, mc.paths=paths.norm4, w.vec=sqrt(1/inf.fraction))  
 	bdr.WT=bdr.gs.mc.gen(alpha=alpha, mc.paths=paths.norm4, w.vec=inf.fraction^(pp-.5))  
+    
+    if(plot){
+    	mydata = as.data.frame(cbind(c(1:n.stg), rep(0,n.stg)))
+    	names(mydata) = c("Time", "Stat")
+	ymax = max(bdr.naive[1],bdr.bonf[1], bdr.OF$bndry.vec, bdr.Poc$bndry.vec, bdr.WT$bndry.vec)
+	ymin = -ymax
+
+    p1 =	ggplot(mydata, aes(Time, Stat)) + geom_point(size=0, color="white") + geom_hline(yintercept=bdr.naive[1], linetype="dashed", color = "red") + geom_hline(yintercept=-bdr.naive[1], linetype="dashed", color = "red") + geom_hline(yintercept=bdr.bonf[1], linetype="dashed", color = "blue") + geom_hline(yintercept=-1*bdr.bonf[1], linetype="dashed", color = "blue") + stat_function(fun = function(xx) bdr.OF$cons*(xx/n.stg)^(-1/2),linetype="dashed", color = "purple") + stat_function(fun = function(xx) -bdr.OF$cons*(xx/n.stg)^(-1/2),linetype="dashed", color = "purple") + stat_function(fun = function(xx) bdr.Poc$cons,linetype="dashed", color = "black")+ stat_function(fun = function(xx) -bdr.Poc$cons,linetype="dashed", color = "black") + stat_function(fun = function(xx) bdr.WT$cons*(xx/n.stg)^(.4-1/2),linetype="dashed", color = "grey") + stat_function(fun = function(xx) -bdr.WT$cons*(xx/n.stg)^(.4-1/2),linetype="dashed", color = "grey") + ylim(ymin,ymax) + labs(title = "Boundaries", x = "Time/Stages", y = expression(paste("Test statistic, ",Z[E]))) + annotate(geom = 'text', label = "Naive = red; Bonferroni = blue; O'Brien-Fleming = purple; Pocock = black; Wang-Tsiatis = grey", x = -Inf, y = Inf, hjust = 0, vjust = 1, size=2)
+    
+    
+print(p1)
 
 
-
-	return(list("Naive" = bdr.naive, "Bonf" = bdr.bonf, "Pocock" = bdr.Poc$bndry.vec, "OBrien_Fleming" = bdr.OF$bndry.vec, "Wang_Tsiatis" = bdr.WT$bndry.vec))
+    }
+    if(!plot) {p1 = NULL}
+	return(list("Naive" = bdr.naive, "Bonf" = bdr.bonf, "Pocock" = bdr.Poc$bndry.vec, "OBrien_Fleming" = bdr.OF$bndry.vec, "Wang_Tsiatis" = bdr.WT$bndry.vec, plot = p1))
 
 }
 

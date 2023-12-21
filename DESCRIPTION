@@ -6,4 +6,4 @@ Author: Layla Parast, Jay Bartroff
 Maintainer: Layla Parast <parast@austin.utexas.edu>
 Description: Provides functions to implement group sequential procedures that allow for early stopping to declare efficacy using a surrogate marker and the possibility of futility stopping.   More details will be available in the future in: Parast, L. and Bartroff, J (2023+) "Group Sequential Testing of a Treatment Effect Using a Surrogate Marker".
 License: GPL
-Imports: stats, MASS
+Imports: stats, MASS, ggplot2
