@@ -84,8 +84,7 @@ gs.boundaries = function(szerop, sonep, yzerop, n.stg, B.norm=1e6, alpha=0.05, p
 
     p1 =	ggplot(mydata, aes(Time, Stat)) + geom_point(size=0, color="white") + geom_hline(yintercept=bdr.naive[1], linetype="dashed", color = "red") + geom_hline(yintercept=-bdr.naive[1], linetype="dashed", color = "red") + geom_hline(yintercept=bdr.bonf[1], linetype="dashed", color = "blue") + geom_hline(yintercept=-1*bdr.bonf[1], linetype="dashed", color = "blue") + stat_function(fun = function(xx) bdr.OF$cons*(xx/n.stg)^(-1/2),linetype="dashed", color = "purple") + stat_function(fun = function(xx) -bdr.OF$cons*(xx/n.stg)^(-1/2),linetype="dashed", color = "purple") + stat_function(fun = function(xx) bdr.Poc$cons,linetype="dashed", color = "black")+ stat_function(fun = function(xx) -bdr.Poc$cons,linetype="dashed", color = "black") + stat_function(fun = function(xx) bdr.WT$cons*(xx/n.stg)^(.4-1/2),linetype="dashed", color = "grey") + stat_function(fun = function(xx) -bdr.WT$cons*(xx/n.stg)^(.4-1/2),linetype="dashed", color = "grey") + ylim(ymin,ymax) + labs(title = "Boundaries", x = "Time/Stages", y = expression(paste("Test statistic, ",Z[E]))) + annotate(geom = 'text', label = "Naive = red; Bonferroni = blue; O'Brien-Fleming = purple; Pocock = black; Wang-Tsiatis = grey", x = -Inf, y = Inf, hjust = 0, vjust = 1, size=2)
     
-    
-print(p1)
+
 
 
     }
