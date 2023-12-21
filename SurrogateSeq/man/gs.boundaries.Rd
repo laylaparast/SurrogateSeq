@@ -6,7 +6,8 @@ Computes group sequential boundaries }
 \description{
 Computes group sequential (and naive) boundaries for the nonparametric test for a treatment effect on the primary outcome using surrogate marker information. The boundaries and test statistic borrow information from a prior study (Study A) about the relationship between the surrogate and the primary outcome to test for a treatment effect in the current study (Study B).}
 \usage{
-gs.boundaries(szerop, sonep, yzerop, n.stg, B.norm = 1e+06, alpha = 0.05)
+gs.boundaries(szerop, sonep, yzerop, n.stg, B.norm = 1e+06, alpha = 0.05, pp = 0.4,
+ inf.fraction = (1:n.stg)/n.stg)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -28,6 +29,13 @@ number of multivariate normal vectors to use in simulation for boundaries; defau
   \item{alpha}{
 desired rejection probability of the test; default is 0.05
 }
+\item{pp}{
+	power parameter for Wang-Tsiatis boundaries; default is 0.4
+}
+\item{inf.fraction}{
+	information fraction vector of the same length as n.stg which reflects the fraction of information at each analysis, should be positive, non-decreasing, and the last entry should be 1; default is (1:n.stg)/n.stg, user may want to specify a different vector for unequal time points
+}
+
 }
 
 \value{

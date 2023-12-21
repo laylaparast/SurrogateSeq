@@ -35,9 +35,7 @@ sample size of control group in Study B; only needed if mat is provided instead 
 }
 \value{
 \item{delta.e}{estimated treatment effect using surrogate marker information}
-\item{sd.e}{estimated standard error of treatment effect estimate}
-\item{test.statistic.e}{test statistic for treatment effect}
-\item{p.value.e}{p-value for test statistic}
+\item{sd.closed}{estimated standard error of treatment effect estimate}
 \item{delta.e.z}{test statistic}
 \item{delta.e.p}{p-value of test statistic} 
 }

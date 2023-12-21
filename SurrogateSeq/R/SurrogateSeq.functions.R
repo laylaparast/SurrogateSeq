@@ -41,7 +41,7 @@ delta.e.estimate = function(sone=NULL,szero=NULL, szerop, yzerop, extrapolate = 
 	sd.e.closed = sqrt(var.closed)
 	delta.e.z = delta.e/sd.e.closed
 	delta.e.p=2*(1- pnorm(abs(delta.e.z)))
-	return(list("delta.e" = delta.e, "sd.e" = sqrt(var(mu.s1)/length(sone)+var(mu.s0)/length(szero)), "sd.closed" = sd.e.closed, "delta.e.z" = delta.e.z, "delta.e.p" = delta.e.p))
+	return(list("delta.e" = delta.e, "sd.closed" = sd.e.closed, "delta.e.z" = delta.e.z, "delta.e.p" = delta.e.p))
 }
 
 pred.smooth.2 <-function(kernel.use,kernel.apply, bw,outcome) { 	
@@ -60,7 +60,7 @@ Kern.FUN <- function(zz,zi,bw)
      matrix(vc, ncol=length(vc), nrow=dm, byrow=T)
     }
 
-gs.boundaries = function(szerop, sonep, yzerop, n.stg, B.norm=1e6, alpha=0.05){
+gs.boundaries = function(szerop, sonep, yzerop, n.stg, B.norm=1e6, alpha=0.05, pp=0.4, inf.fraction = (1:n.stg)/n.stg){
 	bdr.naive = rep(qnorm(1-0.05/2),n.stg)
 	bdr.bonf = rep(qnorm(1-0.05/(2*n.stg)),n.stg)
 	
@@ -72,8 +72,12 @@ gs.boundaries = function(szerop, sonep, yzerop, n.stg, B.norm=1e6, alpha=0.05){
 
 	# Compute boundaries
 	bdr.Poc=bdr.gs.mc.gen(alpha=alpha, mc.paths=paths.norm4, w.vec=rep.int(1, times=n.stg))  
-	bdr.OF=bdr.gs.mc.gen(alpha=alpha, mc.paths=paths.norm4, w.vec=sqrt(n.stg/(1:n.stg)))  
-	bdr.WT=bdr.gs.mc.gen(alpha=alpha, mc.paths=paths.norm4, w.vec=((1:n.stg)/n.stg)^(.4-.5))  
+
+    bdr.OF=bdr.gs.mc.gen(alpha=alpha, mc.paths=paths.norm4, w.vec=sqrt(1/inf.fraction))  
+	bdr.WT=bdr.gs.mc.gen(alpha=alpha, mc.paths=paths.norm4, w.vec=inf.fraction^(pp-.5))  
+
+
+
 	return(list("Naive" = bdr.naive, "Bonf" = bdr.bonf, "Pocock" = bdr.Poc$bndry.vec, "OBrien_Fleming" = bdr.OF$bndry.vec, "Wang_Tsiatis" = bdr.WT$bndry.vec))
 
 }
