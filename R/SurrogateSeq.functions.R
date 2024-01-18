@@ -227,3 +227,158 @@ bdr.gs.mc.gen = function(alpha=.05, mc.paths, w.vec) {
   
   return(list("cons"=cons, "bndry.vec"= cons*w.vec))
 }
+
+gs.boundaries.fut = function(szerop, sonep, yzerop, n.stg, B.norm=1e6, alpha=0.05, pp=0.4, inf.fraction = (1:n.stg)/n.stg, j.star=1, alpha0=(j.star/n.stg)*alpha, plot=FALSE){
+	bdr.naive = rep(qnorm(1-0.05/2),n.stg)
+	bdr.bonf = rep(qnorm(1-0.05/(2*n.stg)),n.stg)
+	
+	# Compute covariance matrix
+	cov.stuffA4=cov.surr.gs(s0.4.est=s0.studya, s1.4.est=s1.studya, 	sa.0=s0.studya, ya.0=StudyA.aids$y0, nb.0=nrow(StudyB.aids$s0), nb.1=nrow(StudyB.aids$s1), full.matrix=TRUE, naive=TRUE)
+
+	# Simulate MVN null paths
+	paths.norm4=mvrnorm(n=B.norm, mu=rep(0,n.stg), Sigma=cov.stuffA4$cov.stand.samp)  
+
+	# Compute boundaries
+	bdr.Poc=bdr.gs.mc.fut(c1=NULL, c2=NULL,pp=.5,j.star=j.star,alpha=alpha,alpha0=.05*.75, mc.paths=paths.norm4, inf.fraction=inf.fraction, n.stg=n.stg)  
+
+    bdr.OF=bdr.gs.mc.fut(c1=NULL, c2=NULL, pp=0, n.stg=n.stg, j.star=j.star, alpha=.05, alpha0=.05*.1, mc.paths=paths.norm4,inf.fraction=inf.fraction)  
+	bdr.WT=bdr.gs.mc.fut(c1=NULL, c2=NULL, pp=pp, n.stg=n.stg, j.star=j.star, alpha=.05, mc.paths=paths.norm4, inf.fraction=inf.fraction)  
+    
+    Pocock.futility = bdr.Poc$a
+     Pocock.nullrejection = bdr.Poc$b
+     OBrien_Fleming.futility = bdr.OF$a
+     OBrien_Fleming.nullrejection = bdr.OF$b
+     Wang_Tsiatis.futility = bdr.WT$a
+     Wang_Tsiatis.nullrejection = bdr.WT$b
+     
+    if(plot){
+    	mydata = as.data.frame(cbind(c(1:n.stg), rep(0,n.stg)))
+    	names(mydata) = c("Time", "Stat")
+		ymax = max(bdr.naive[1],bdr.bonf[1], bdr.OF$bndry.vec, bdr.Poc$bndry.vec, bdr.WT$bndry.vec)
+	ymin = -ymax
+
+    p1 =	ggplot(mydata, aes(Time, Stat)) + geom_point(size=0, color="white") + geom_hline(yintercept=bdr.naive[1], linetype="dashed", color = "red") + geom_hline(yintercept=-bdr.naive[1], linetype="dashed", color = "red") + geom_hline(yintercept=bdr.bonf[1], linetype="dashed", color = "blue") + geom_hline(yintercept=-1*bdr.bonf[1], linetype="dashed", color = "blue") + stat_function(fun = function(xx) bdr.OF$c1*(xx/n.stg)^(-1/2),linetype="dashed", color = "purple") + stat_function(fun = function(xx) -bdr.OF$c1*(xx/n.stg)^(-1/2),linetype="dashed", color = "purple") + stat_function(fun = function(xx) ((bdr.OF$c1+bdr.OF$c2)*(xx/n.stg)^(.5)-bdr.OF$c2*(xx/n.stg)^(0-.5)),linetype="dashed", color = "purple") + stat_function(fun = function(xx) -((bdr.OF$c1+bdr.OF$c2)*(xx/n.stg)^(.5)-bdr.OF$c2*(xx/n.stg)^(0-.5)),linetype="dashed", color = "purple") + stat_function(fun = function(xx) bdr.Poc$c1,linetype="dashed", color = "black")+ stat_function(fun = function(xx) -bdr.Poc$c1,linetype="dashed", color = "black") + stat_function(fun = function(xx) ((bdr.Poc$c1+bdr.Poc$c2)*(xx/n.stg)^(.5)-bdr.Poc$c2*(xx/n.stg)^(.5-.5)),linetype="dashed", color = "black")+ stat_function(fun = function(xx) -((bdr.Poc$c1+bdr.Poc$c2)*(xx/n.stg)^(.5)-bdr.Poc$c2*(xx/n.stg)^(.5-.5)),linetype="dashed", color = "black") + stat_function(fun = function(xx) bdr.WT$c1*(xx/n.stg)^(pp-1/2),linetype="dashed", color = "grey") + stat_function(fun = function(xx) -bdr.WT$c1*(xx/n.stg)^(pp-1/2),linetype="dashed", color = "grey") + stat_function(fun = function(xx) ((bdr.WT$c1+bdr.WT$c2)*(xx/n.stg)^(.5)-bdr.WT$c2*(xx/n.stg)^(pp-.5)),linetype="dashed", color = "grey") + stat_function(fun = function(xx) -((bdr.WT$c1+bdr.WT$c2)*(xx/n.stg)^(.5)-bdr.WT$c2*(xx/n.stg)^(pp-.5)),linetype="dashed", color = "grey") + ylim(ymin,ymax) + labs(title = "Boundaries", x = "Time/Stages", y = expression(paste("Test statistic, ",Z[E]))) + annotate(geom = 'text', label = "Naive = red; Bonferroni = blue; O'Brien-Fleming = purple; Pocock = black; Wang-Tsiatis = grey", x = -Inf, y = Inf, hjust = 0, vjust = 1, size=2)
+
+    }
+    if(!plot) {p1 = NULL}
+	return(list("Naive" = bdr.naive, "Bonf" = bdr.bonf, "Pocock.futility" = Pocock.futility, "Pocock.nullrejection" = Pocock.nullrejection, "OBrien_Fleming.futility" = OBrien_Fleming.futility, "OBrien_Fleming.nullrejection" = OBrien_Fleming.nullrejection, "Wang_Tsiatis.futility" = Wang_Tsiatis.futility, "Wang_Tsiatis.nullrejection" = Wang_Tsiatis.nullrejection, plot = p1))
+
+}
+
+bdr.gs.mc.fut = function(c1=NULL, c2=NULL, pp=.4, n.stg, j.star=1, alpha=.05, alpha0=(j.star/n.stg)*alpha, mc.paths, inf.fraction=(1:n.stg)/n.stg, N.iter.max=100, alpha.tol=.02*alpha) {
+  
+ # Return the boundaries for a group sequential test of the null vs. 2-sided alternative *with futility stopping* with boundaries given by the Wang-Tsiatis power family as in Jennison & Turnbull, Exp (5.3) on page 118.  It does this by returning quantiles of the sample paths of the (null) test statistic paths in mc.paths.   
+  #
+  # INPUTS
+  # c1, c2 = these are the constants determining the outer boundary b[j] = c1 * (j/J)^{pp-1/2} and futility boundaries a[j] = (c1+c2) * (j/J)^{1/2} - c2 * (j/J)^{pp-1/2} for j >= j.star, where J is the max no of stages (AKA n.stg). If c1 is null, it is found as the upper alpha0 quantile of the max over the first j.star stages.
+  # pp = parameter in the power family of boundaries. pp=.5 gives boundaries similar to Pocock, pp=0 gives similar to O'Brien-Fleming.
+  # n.stg = maximum number of analyses (or "stages")
+  # j.star = earliest stage at which futility stopping is allowed. Should be <= n.stg-1 (there is already "futility stopping" at the n.stg-th stage anyway).
+  # alpha = desired type I error probability
+  # alpha0 = the part of alpha that c1 is chosen to spend in first j.star stages
+  # mc.paths = matrix of sample paths, each row being a sample path, no. of columns should be no. of stages, n.stg
+  # inf.fraction = information fraction used in computing boundaries, an n.stg-long vector. Should be positive, non-decreasing, with last element 1.  Default is 1/n.stg, 2/n.stg, ..., 1.
+  # N.iter.max = max no. of iterations for finding c2
+  # alpha.tol = the tolerance for stopping search for c2
+  #
+  # OUTPUTS
+  # a,b = the futility and null-rejection boundary vectors
+  # prej = prob. of rejecting the null (at any stage)
+  # EM, se.M
+  # c1, c2 = constants used in boundaries a, b
+  #
+  #  J.B. 4.Jul.23; last modified 11.Jan.24
+  
+   
+  #d=dim(mc.paths)
+  #B=d[1]  # no. rows
+  
+  if (is.null(c1)) {
+    if (j.star==1) { # 1x1 matrices cause problems so do this by hand
+      paths.c1= abs(mc.paths[,1:j.star]) * (inf.fraction[1:j.star])^(-(pp-.5))
+    } else { # j.star >= 2 so do regular matrix multiplication
+      paths.c1=apply(abs(mc.paths[,1:j.star]) %*% diag((inf.fraction[1:j.star])^(-(pp-.5))), 1, function(x) max(x))
+    }
+    c1=quantile(x=paths.c1, probs=1-alpha0)
+  }
+  
+  b=c1*(inf.fraction^(pp-.5))
+  if (is.null(c2)) {  # Find of c2
+    # def aux function
+    p.rej.cand=function(c2.cand) {  # prob of rejecting null, using cs.cand as candidate value for c2
+      a.cand=rep.int(x=0, times=n.stg)
+      r=inf.fraction[j.star:n.stg]
+      a.cand[j.star:n.stg]=pmax(0,(c1+c2.cand)*sqrt(r) - c2.cand*(r^(pp-.5)))
+      return(op.char.gs.fut(b.vec=b, a.vec=a.cand, paths=mc.paths)$prej)
+    }
+    c2.L=-c1; p.L=p.rej.cand(c2.L)
+    c2.R=c1/((inf.fraction[n.stg-1])^(pp-1)-1); p.R=p.rej.cand(c2.R)
+    if (p.L>alpha) {
+      a=rep.int(0,times=n.stg) # no futility stopping
+    } else if (p.R<alpha) { # use c2=c2.R for some (conservative) futility stopping
+      c2=c2.R
+      a=rep.int(x=0, times=n.stg)
+      r=inf.fraction[j.star:n.stg]
+      a[j.star:n.stg]=pmax(0,(c1+c2)*sqrt(r) - c2*(r^(pp-.5)))
+    } else {
+      # p.L <= alpha and p.R >= alpha, so start bisection method
+      N.iter=1
+      c2=.5*(c2.L+c2.R)
+      p.c2=p.rej.cand(c2)
+      while ((N.iter<N.iter.max) & (abs(p.c2-alpha) > alpha.tol)) {
+        N.iter=N.iter+1
+        if (p.c2>alpha) c2.R=c2 else c2.L=c2
+        c2=.5*(c2.L+c2.R)
+        p.c2=p.rej.cand(c2)
+      }
+      #cat("c2 = ", c2, ", P(rej) = ", p.c2,"\n", sep="")
+      a=rep.int(x=0, times=n.stg)
+      r=inf.fraction[j.star:n.stg]
+      a[j.star:n.stg]=pmax(0,(c1+c2)*sqrt(r) - c2*(r^(pp-.5)))
+    }
+  } else { # c2 was given 
+    a=rep.int(x=0, times=n.stg)
+    r=inf.fraction[j.star:n.stg]
+    a[j.star:n.stg]=pmax(0,(c1+c2)*sqrt(r) - c2*(r^(pp-.5)))
+  }
+  
+  # call op.char.gs.fut
+  op.char=op.char.gs.fut(b.vec=b, a.vec=a, paths=mc.paths)  # OUTPUTS EM, se.M, prej
+    
+  return(list("EM"=op.char$EM, "se.M"=op.char$se.M, "prej"=op.char$prej, "a"=a, "b"=b, "c1"=c1, "c2"=c2))
+}
+
+op.char.gs.fut = function(b.vec,a.vec,paths) {
+ # Compute the operating characteristics on the group sequential test with futility stopping statistics in paths: The expected stopping stage no., plus the probability of rejecting the null in favor of the 2-sided alternative. This is for a general GS test which uses the boundaries in bndry.vec.
+  #
+  # INPUTS
+  # a.vec, b.vec = futility and "null-rejection" boundaries, respectively.  Both should be >= 0, and a.vec[n.stg] = b.vec[n.stg]. a.vec[j]=0 means no futility stopping at stage j.
+  # paths = matrix of test statistic sample paths, each row being a sample path, no. of columns is max number of stages
+  #
+  # OUTPUTS
+  # EM = expected stopping stage number
+  # se.M = standard error of stopping time
+  # prej = probability of rejecting null (at any stage)
+  #
+  #  J.B. 6.Jul.23; last modified 6.Jul.23
+  
+  d=dim(paths)
+  n.stg=d[2]  # no. cols
+  B=d[1]  # no. rows
+  
+  paths.abs=abs(paths)
+  
+  M.a=apply(paths.abs %*% diag(1/a.vec), 1, function(x) which(x<1)[1]) # where was first crossing of futility boundary (not necessarily pre-stopping time), or NA if no crossing
+  M.b=apply(paths.abs %*% diag(1/b.vec), 1, function(x) which(x>=1)[1]) # where was first crossing of null-rejection boundary (not necessarily pre-stopping time), or NA if no crossing
+  
+  M.a[is.na(M.a)] = n.stg+1  # deal w/ NA's before taking mins and comparing
+  M.b[is.na(M.b)] = n.stg+1
+  
+  M=pmin(M.a, M.b)
+  EM=mean(M)
+  se.M=sd(M)/sqrt(B)
+  
+  prej=sum(M.b<M.a)/B
+  
+  return(list("EM"=EM, "se.M"=se.M, "prej"=prej))
+}
