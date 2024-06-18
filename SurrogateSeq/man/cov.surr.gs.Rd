@@ -8,7 +8,8 @@ Computes variances and standardized covariance matrix for the group sequential s
 Computes variances and standardized covariance matrix for the group sequential statistic
 }
 \usage{
-cov.surr.gs(s0.4.est, s1.4.est, sa.0, ya.0, nb.0, nb.1, full.matrix = TRUE, naive = FALSE)
+cov.surr.gs(s0.4.est, s1.4.est, sa.0, ya.0, nb.0, nb.1, full.matrix = TRUE, 
+naive = FALSE)
 }
 \arguments{
   \item{s0.4.est}{

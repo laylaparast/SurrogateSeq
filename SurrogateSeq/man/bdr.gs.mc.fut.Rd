@@ -8,12 +8,14 @@ Calculates the boundaries for the group sequential tests with futility stopping
 Returns the boundaries for any group sequential test of the null vs. 2-sided alternative whose boundaries take the form of a single constant times a known weight vector, which is w.vec; allows for futility stopping.  These include Pocock (w.vec=(1,1,..)), O'Brien-Fleming (w.vec=(sqrt(n.stg/1), sqrt(n.stg/2), ..., 1)), etc.  It does this by returning quantiles of the sample paths of the (null) test statistic paths in mc.paths.   
 }
 \usage{
-bdr.gs.mc.fut(c1 = NULL, c2 = NULL, pp = 0.4, n.stg, j.star = 1, alpha = 0.05, alpha0 = (j.star/n.stg) * alpha, mc.paths, inf.fraction = (1:n.stg)/n.stg, N.iter.max = 100, alpha.tol = 0.02 * alpha)
+bdr.gs.mc.fut(c1 = NULL, c2 = NULL, pp = 0.4, n.stg, j.star = 1, alpha = 0.05, 
+alpha0 = (j.star/n.stg) * alpha, mc.paths, inf.fraction = (1:n.stg)/n.stg, 
+N.iter.max = 100, alpha.tol = 0.02 * alpha)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{c1}{
-c1 and c2 are the constants determining the outer boundary b[j] = c1 * (j/J)^{pp-1/2} and futility boundaries a[j] = (c1+c2) * (j/J)^{1/2} - c2 * (j/J)^{pp-1/2} for j >= j.star, where J is the max no of stages (AKA n.stg). If c1 is null, it is found as the upper alpha0 quantile of the max over the first j.star stages.
+c1 and c2 are the constants determining the outer boundary \eqn{b[j] = c1 * (j/J)^{pp-1/2}} and futility boundaries \eqn{a[j] = (c1+c2) * (j/J)^{1/2} - c2 * (j/J)^{pp-1/2}} for j >= j.star, where J is the max no of stages (AKA n.stg). If c1 is null, it is found as the upper alpha0 quantile of the max over the first j.star stages.
 }
   \item{c2}{
 see description in c1

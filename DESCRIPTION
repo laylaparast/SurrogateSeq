@@ -1,6 +1,6 @@
 Package: SurrogateSeq
 Type: Package
-Title: Assessing Heterogeneity in Surrogacy Using Censored Data
+Title: Group Sequential Testing of a Treatment Effect Using a Surrogate Marker
 Version: 1.0
 Author: Layla Parast, Jay Bartroff
 Maintainer: Layla Parast <parast@austin.utexas.edu>

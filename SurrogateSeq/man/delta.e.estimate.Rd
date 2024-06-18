@@ -42,7 +42,7 @@ sample size of control group in Study B; only needed if mat is provided instead 
 \references{
 Parast, Cai, and Tian (2023). Using a Surrogate with Heterogeneous Utility to Test for a Treatment Effect. Statistics in Medicine, 42(1): 68-88.
 
-Parast and Bartroff (2023+). Group Sequential Testing of a Treatment Effect Using a Surrogate Marker. Under Review.
+Parast and Bartroff (2024+). Group Sequential Testing of a Treatment Effect Using a Surrogate Marker. Under Review.
 }
 \author{
 Layla Parast

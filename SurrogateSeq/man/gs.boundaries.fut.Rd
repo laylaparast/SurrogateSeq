@@ -7,8 +7,9 @@ Computes group sequential boundaries with futility stopping
 \description{
 Computes group sequential (and naive) boundaries for the nonparametric test for a treatment effect on the primary outcome using surrogate marker information. The boundaries and test statistic borrow information from a prior study (Study A) about the relationship between the surrogate and the primary outcome to test for a treatment effect in the current study (Study B). The group sequential boundaries allow for futility stopping (bounds given).}
 \usage{
-gs.boundaries.fut(szerop, sonep, yzerop, n.stg, B.norm = 1e+06, alpha = 0.05, 
-pp = 0.4, inf.fraction = (1:n.stg)/n.stg, j.star=1, alpha0=(j.star/n.stg)*alpha, 
+gs.boundaries.fut(szerop, sonep, yzerop, nzero, none, n.stg, B.norm = 1e+06, 
+alpha = 0.05, pp = 0.4, inf.fraction = (1:n.stg)/n.stg, j.star=1, 
+alpha0=(j.star/n.stg)*alpha, 
 plot = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
@@ -21,6 +22,12 @@ surrogate marker in the treated group in Study A
 }
   \item{yzerop}{
 primary outcome in the control group in Study A
+}
+  \item{nzero}{
+sample size of control group in Study B
+}
+\item{none}{
+sample size of treated group in Study B
 }
   \item{n.stg}{
 maximum number of analyses
@@ -60,7 +67,7 @@ Returns a list of boundaries:
 }
 
 \references{
-Parast and Bartroff (2023+). Group Sequential Testing of a Treatment Effect Using a Surrogate Marker. Under Review.
+Parast and Bartroff (2024+). Group Sequential Testing of a Treatment Effect Using a Surrogate Marker. Under Review.
 }
 \author{
 Layla Parast and Jay Bartroff
@@ -72,8 +79,9 @@ data(StudyB.aids)
 s0.studya = StudyA.aids$s0
 s1.studya = StudyA.aids$s1
 
-bound = gs.boundaries.fut(szerop = s0.studya, sonep = s1.studya, 
-yzerop=StudyA.aids$y0, n.stg=4, B.norm=1e6, alpha=0.05)
+bound = gs.boundaries.fut(szerop = s0.studya, sonep = s1.studya, yzerop=StudyA.aids$y0, 
+nzero = nrow(StudyB.aids$s0),none = nrow(StudyB.aids$s1), n.stg=4, B.norm=1e6, 
+alpha=0.05)
 
 bound
 }

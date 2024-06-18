@@ -60,12 +60,15 @@ Kern.FUN <- function(zz,zi,bw)
      matrix(vc, ncol=length(vc), nrow=dm, byrow=T)
     }
 
-gs.boundaries = function(szerop, sonep, yzerop, n.stg, B.norm=1e6, alpha=0.05, pp=0.4, inf.fraction = (1:n.stg)/n.stg, plot=FALSE){
+gs.boundaries = function(szerop, sonep, yzerop, nzero, none, n.stg, B.norm=1e6, alpha=0.05, pp=0.4, inf.fraction = (1:n.stg)/n.stg, plot=FALSE){
+	Time=NULL
+	Stat=NULL
+	xx=NULL
 	bdr.naive = rep(qnorm(1-0.05/2),n.stg)
 	bdr.bonf = rep(qnorm(1-0.05/(2*n.stg)),n.stg)
 	
 	# Compute covariance matrix
-	cov.stuffA4=cov.surr.gs(s0.4.est=s0.studya, s1.4.est=s1.studya, 	sa.0=s0.studya, ya.0=StudyA.aids$y0, nb.0=nrow(StudyB.aids$s0), nb.1=nrow(StudyB.aids$s1), full.matrix=TRUE, naive=TRUE)
+	cov.stuffA4=cov.surr.gs(s0.4.est=szerop, s1.4.est=sonep, 	sa.0=szerop, ya.0=yzerop, nb.0=nzero, nb.1=none, full.matrix=TRUE, naive=TRUE)
 
 	# Simulate MVN null paths
 	paths.norm4=mvrnorm(n=B.norm, mu=rep(0,n.stg), Sigma=cov.stuffA4$cov.stand.samp)  
@@ -228,12 +231,15 @@ bdr.gs.mc.gen = function(alpha=.05, mc.paths, w.vec) {
   return(list("cons"=cons, "bndry.vec"= cons*w.vec))
 }
 
-gs.boundaries.fut = function(szerop, sonep, yzerop, n.stg, B.norm=1e6, alpha=0.05, pp=0.4, inf.fraction = (1:n.stg)/n.stg, j.star=1, alpha0=(j.star/n.stg)*alpha, plot=FALSE){
+gs.boundaries.fut = function(szerop, sonep, yzerop, nzero, none, n.stg, B.norm=1e6, alpha=0.05, pp=0.4, inf.fraction = (1:n.stg)/n.stg, j.star=1, alpha0=(j.star/n.stg)*alpha, plot=FALSE){
+	Time=NULL
+	Stat=NULL
+	xx=NULL
 	bdr.naive = rep(qnorm(1-0.05/2),n.stg)
 	bdr.bonf = rep(qnorm(1-0.05/(2*n.stg)),n.stg)
 	
 	# Compute covariance matrix
-	cov.stuffA4=cov.surr.gs(s0.4.est=s0.studya, s1.4.est=s1.studya, 	sa.0=s0.studya, ya.0=StudyA.aids$y0, nb.0=nrow(StudyB.aids$s0), nb.1=nrow(StudyB.aids$s1), full.matrix=TRUE, naive=TRUE)
+	cov.stuffA4=cov.surr.gs(s0.4.est=szerop, s1.4.est=sonep, sa.0=szerop, ya.0=yzerop, nb.0=nzero, nb.1=none, full.matrix=TRUE, naive=TRUE)
 
 	# Simulate MVN null paths
 	paths.norm4=mvrnorm(n=B.norm, mu=rep(0,n.stg), Sigma=cov.stuffA4$cov.stand.samp)  
