@@ -8,7 +8,9 @@ output:
 ```{r global_options, echo=FALSE}
 knitr::opts_chunk$set(fig.width=7, warning=FALSE, tidy=TRUE, tidy.opts=list(width.cutoff=60))
 ```
-We will go through an example using the main functions in the SurrogateSeq package. First, load the package from github with the code below. If you have never installed the package devtools, you will need to do that; see the commented out code below.
+We will go through an example using the main functions in the SurrogateSeq package. For the runnable R markdown file that produces this html, click [here](https://github.com/laylaparast/SurrogateSeq/blob/main/SurrogateSeq_tutorial.Rmd).
+
+First, load the package from github with the code below. If you have never installed the package devtools, you will need to do that; see the commented out code below.
 
 ```{r results = "hide", message=FALSE}
 #install.packages("devtools")
