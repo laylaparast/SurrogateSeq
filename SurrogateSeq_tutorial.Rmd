@@ -10,15 +10,13 @@ knitr::opts_chunk$set(fig.width=7, warning=FALSE, tidy=TRUE, tidy.opts=list(widt
 ```
 We will go through an example using the main functions in the SurrogateSeq package. For the runnable R markdown file that produces this html, click [here](https://github.com/laylaparast/SurrogateSeq/blob/main/SurrogateSeq_tutorial.Rmd).
 
-First, load the package from github with the code below. If you have never installed the package devtools, you will need to do that; see the commented out code below.
+First, install and load the package from CRAN, along with the ggplot2 package:
 
 ```{r results = "hide", message=FALSE}
-#install.packages("devtools")
-library(devtools)
-library(ggplot2)
-devtools::install_github("laylaparast/SurrogateSeq", build = FALSE,  quiet = TRUE)
+#install.packages("SurrogateSeq")
+#install.packages("ggplot2")
 library(SurrogateSeq)
-
+library(ggplot2)
 ```
 
 This package provides functions to implement group sequential procedures that allow for early stopping to declare efficacy using a surrogate marker and the possibility of futility stopping. The goal is to test for a treatment effect using only surrogate marker information measured in the current study (Study B) by borrowing information learned from the prior study (Study A). More details will be available in the future in: Parast, L. and Bartroff, J (2024+) Group Sequential Testing of a Treatment Effect Using a Surrogate Marker''.
