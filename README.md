@@ -1,4 +1,4 @@
-# SurrogateSeq <img src="hex_SurrogateSeq.png" align="right" height="150" alt="SurrogateSeq hex logo" />
+# SurrogateSeq <img src="hex_SurrogateSeq.png" align="right" height="220" alt="SurrogateSeq hex logo" />
 
 <!-- badges: start -->
 [![CRAN status](https://www.r-pkg.org/badges/version/SurrogateSeq)](https://CRAN.R-project.org/package=SurrogateSeq)
