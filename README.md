@@ -9,4 +9,4 @@
 More details on the method are available in Parast L and Bartroﬀ J (2024). Group Sequential Testing of a Treatment Eﬀect Using a
 Surrogate Marker. Biometrics, 80(4): ujae108. [doi:10.1093/biomtc/ujae108](https://doi.org/10.1093/biomtc/ujae108). 
 
-Go here to view a tutorial for this package: [Surrogate Seq Tutorial](https://htmlpreview.github.io/?https://github.com/laylaparast/SurrogateSeq/blob/main/SurrogateSeq_tutorial.html)  We also have a Shiny app here: [SurrogateSeq Shiny](https://parastlab.shinyapps.io/SurrogateSeqApp/).
+Go here to view a tutorial for this package: [Surrogate Seq Tutorial](https://htmlpreview.github.io/?https://github.com/laylaparast/SurrogateSeq/blob/main/SurrogateSeq_tutorial.html).  We also have a Shiny app here: [SurrogateSeq Shiny](https://parastlab.shinyapps.io/SurrogateSeqApp/).
