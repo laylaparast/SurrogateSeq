@@ -19,12 +19,12 @@ library(SurrogateSeq)
 library(ggplot2)
 ```
 
-This package provides functions to implement group sequential procedures that allow for early stopping to declare efficacy using a surrogate marker and the possibility of futility stopping. The goal is to test for a treatment effect using only surrogate marker information measured in the current study (Study B) by borrowing information learned from the prior study (Study A). More details will be available in the future in: Parast, L. and Bartroff, J (2024+) Group Sequential Testing of a Treatment Effect Using a Surrogate Marker''.
+This package provides functions to implement group sequential procedures that allow for early stopping to declare efficacy using a surrogate marker and the possibility of futility stopping. The goal is to test for a treatment effect using only surrogate marker information measured in the current study (Study B) by borrowing information learned from the prior study (Study A). More details are available in: Parast, L., & Bartroff, J. (2024). Group sequential testing of a treatment effect using a surrogate marker. Biometrics, 80(4), ujae108, [doi:10.1093/biomtc/ujae108](https://doi.org/10.1093/biomtc/ujae108).
 
 The main functions are delta.e.estimate and
 gs.boundaries. The function delta.e.estimate conducts a nonparametric test for a treatment effect on the primary outcome in Study B using surrogate marker information from Study B. This test borrows information from a prior study (Study A) about the relationship between the surrogate and the primary outcome to test for a treatment effect in the current study (Study B). 
 
-This function takes as inputs 1) the surrogate data from the treatment and control groups from Study B, and 2) the surrogate and outcome data for the control group only from Study A.  We will use read AIDS clinical trial data available in the package.
+This function takes as inputs 1) the surrogate data from the treatment and control groups from Study B, and 2) the surrogate and outcome data for the control group only from Study A.  We will use real AIDS clinical trial data available in the package.
 
 ```{r}
 data(StudyA.aids)
@@ -36,10 +36,11 @@ names(StudyB.aids)
 Let's talk about the data. 
 The StudyA.aids dataset has primary outcome and surrogate marker measurements over time from the ACTG 320 clinical trial data. The data are in a list: y1 is the primary outcome in the treatment group in Study A, defined as -1 times (log of RNA at 40 weeks - log of RNA at baseline); y0 is the primary outcome in the control group in Study A; s1 is a dataframe of the surrogate markers at different time points in the treatment group in Study A, defined as change in CD4 cell count from baseline to 4 weeks (CD4_4weeks), 8 weeks (CD4_8weeks), 24 weeks (CD4_24weeks), and 40 weeks (CD4_40weeks); s0 is a dataframe of the surrogate markers at different time points in the control group in Study A.
 
-The StudyB.aids dataset has surrogate marker measurements over time from the ACTG 193A clinical trial data. Note that the time points do not exactly match up to ACTG 320. In the paper, we use Study A surrogate data at 24 weeks to construct the conditional mean function applied to Study B at 16 weeks. Also note that some subjects are missing values of the surrogate at one or more time points. The naive estimate of the treatment effect using the surrogates uses all non-missing data available at each time point. The data are in a list: s1 is a dataframe of the surrogate markers at different time points in the treatment group in Study B; the surrogate marker is change in CD4 cell count from baseline to 8 weeks (CD4_8weeks), 16 weeks (CD4_16weeks), 24 weeks (CD4_24weeks), and 40 weeks (CD4_40weeks); s0 is a dataframe of the surrogate markers at different time points in the control group in Study B
+The StudyB.aids dataset has surrogate marker measurements over time from the ACTG 193A clinical trial data. Note that the time points do not exactly match up to ACTG 320. In the paper, we use Study A surrogate data at 24 weeks to construct the conditional mean function applied to Study B at 16 weeks. Also note that some subjects are missing values of the surrogate at one or more time points. The naive estimate of the treatment effect using the surrogates uses all non-missing data available at each time point. The data are in a list: s1 is a dataframe of the surrogate markers at different time points in the treatment group in Study B; the surrogate marker is change in CD4 cell count from baseline to 8 weeks (CD4_8weeks), 16 weeks (CD4_16weeks), 24 weeks (CD4_24weeks), and 40 weeks (CD4_40weeks); s0 is a dataframe of the surrogate markers at different time points in the control group in Study B.
 
 
-Now we are ready to use the delta.e.estimate function. Let's estimate and test for a treatment effect on the primary outcome (change in RNA at 40 weeks) in Study B using only the surrogate (change in CD4 count at 24 weeks). 
+Now we are ready to use the delta.e.estimate function. Let's estimate and test for a treatment effect on the primary outcome (change in RNA at 40 weeks) in Study B using only the surrogate (change in CD4 count at 24 weeks).
+
 ```{r}
 s1.studyb = StudyB.aids$s1
 s0.studyb = StudyB.aids$s0
@@ -54,7 +55,7 @@ These results show that the early treatment effect estimate is `r round(delta.e.
 
 Now let's take a look at the other main function, gs.boundaries. This function computes group sequential (and naive) boundaries for the nonparametric test for a treatment effect on the primary outcome using surrogate marker information. The boundaries and test statistic borrow information from a prior study (Study A) about the relationship between the surrogate and the primary outcome to test for a treatment effect in the current study (Study B). The function returns a list of boundaries: Naive boundaries, Bonferroni boundaries, Pocock boundaries, O’Brien-Fleming boundaries, and Wang-Tsiatis boundaries. 
 
-The boundaries are computed using Study A data only. The function gs.boundaries takes as inputs 1) the surrogate data from the treatment and control groups from Study A, and 2) the outcome data for the control group only from Study A. You additionally need to specify the number of analyses/looks/stages using n.stg. Let's try it on the AIDS data. We will use the option plot=TRUE which shows us a nice resulting plot.
+The boundaries are computed using Study A data only. The function gs.boundaries takes as inputs 1) the surrogate data from the treatment and control groups from Study A, and 2) the outcome data for the control group only from Study A. You additionally need to specify the number of analyses/looks/stages using `n.stg`. Let's try it on the AIDS data. We will use the option plot=TRUE which shows us a nice resulting plot.
 
 ```{r}
 s1.studya = StudyA.aids$s1
